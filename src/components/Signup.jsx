@@ -1,12 +1,13 @@
-import { useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { login } from "../store/authSlice"
-import {Button, Input, Logo} from "./index"
-import { useDispatch } from "react-redux"
-import authService from "../appwrite/auth"
-import { useForm } from "react-hook-form"
+import React, {useState} from 'react'
+import authService from '../appwrite/auth'
+import {Link ,useNavigate} from 'react-router-dom'
+import {login} from '../store/authSlice'
+import {Button, Input, Logo} from './index.js'
+import {useDispatch} from 'react-redux'
+import {useForm} from 'react-hook-form'
+
 function Signup() {
-     const navigate = useNavigate()
+    const navigate = useNavigate()
     const [error, setError] = useState("")
     const dispatch = useDispatch()
     const {register, handleSubmit} = useForm()
@@ -24,12 +25,13 @@ function Signup() {
             setError(error.message)
         }
     }
+
   return (
-      <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center">
             <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
             <div className="mb-2 flex justify-center">
                     <span className="inline-block w-full max-w-[100px]">
-                        <Logo  />
+                        <Logo width="100%" />
                     </span>
                 </div>
                 <h2 className="text-center text-2xl font-bold leading-tight">Sign up to create account</h2>
@@ -82,4 +84,5 @@ function Signup() {
     </div>
   )
 }
+
 export default Signup

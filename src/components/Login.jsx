@@ -10,18 +10,25 @@ function Login() {
     const dispatch = useDispatch();
     const {register, handleSubmit} = useForm();
     const [error, setError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const login = async(data) => {
+    const login = async (data) => {
         setError("")
+        setIsSubmitting(true)
         try {
             const session = await authService.login(data)
-            if (session) {
-                const userData = await authService.getCurrentUser()
-                if (userData) dispatch(authLogin(userData))
-                navigate("/")    
-            }
+            if (!session) throw new Error("Login failed: no session returned")
+
+            const userData = await authService.getCurrentUser()
+            if (!userData) throw new Error("Login failed: could not fetch current user")
+
+            dispatch(authLogin({ userData }))
+            navigate("/")
         } catch (error) {
-            setError(error.message)
+            console.error("Login error", error)
+            setError(error?.message || "Something went wrong")
+        } finally {
+            setIsSubmitting(false)
         }
     }
   return (
@@ -66,7 +73,8 @@ function Login() {
                 <Button
                 type="submit"
                 className="w-full"
-                >Sign in</Button>
+                disabled={isSubmitting}
+                >{isSubmitting ? "Signing in..." : "Sign in"}</Button>
                 </div>
                 </form>   
         </div>

@@ -8,19 +8,16 @@ export default function Protected({ children, authentication = true }) {
     const authStatus = useSelector(state => state.auth.status)
 
     useEffect(() => {
-        //TODO: make it more easy to understand
-
-        // if (authStatus ===true){
-        //     navigate("/")
-        // } else if (authStatus === false) {
-        //     navigate("/login")
-        // }
-        
-        //let authValue = authStatus === true ? true : false
-        if (authentication && authStatus !== authentication) {
-            navigate('/login')
-        } else if (!authentication && authStatus !== authentication) {
-            navigate('/')
+        if (authentication) {
+            // route requires auth (protected route)
+            if (authStatus === false) {
+                navigate('/login')
+            }
+        } else {
+            // public auth pages (login/signup) should not be accessed when already logged in
+            if (authStatus === true) {
+                navigate('/')
+            }
         }
     }, [authStatus, navigate, authentication])
 
