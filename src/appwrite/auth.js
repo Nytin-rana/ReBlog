@@ -23,10 +23,23 @@ export class AuthService{
     }
     
     async login({email,password}) {
-        return this.account.createEmailPasswordSession({ email, password });
+        return this.account.createEmailPasswordSession({email, password});
     }
     async getCurrentUser() {
-        return this.account.get();
+        try {
+            return await this.account.get();
+        } catch (error) {
+            const isUnauthorized =
+                error?.code === 401 ||
+                error?.type === "user_unauthorized" ||
+                error?.message?.includes("Unauthorized");
+
+            if (!isUnauthorized) {
+                console.log("Appwrite service :: getCurrentUser :: error", error);
+            }
+        }
+
+        return null;
     }
     async logout() {
         return this.account.deleteSessions();

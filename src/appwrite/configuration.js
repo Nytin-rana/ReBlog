@@ -81,13 +81,20 @@ export class Service{
 
     async getPosts(queries= [Query.equal("status","active")]) {
             try {
-                return await this.tables.listRows({
+                const posts =await this.tables.listRows({
                     databaseId: config.appwriteDatabaseId,
                 tableId: config.appwriteCollectionId,
                 queries
                 });
+                console.log(posts);
+                return posts;
+                
             } catch (error) {
-                console.log("Appwrite service :: getPosts :: error",error);
+                // Don't log 401 errors as they're expected when not authenticated
+                if (error.code !== 401) {
+                    console.log("Appwrite service :: getPosts :: error",error);
+                }
+                return null;
             }
     }
 
@@ -118,7 +125,7 @@ export class Service{
     }
 
     getFilePreview(fileId) {
-        return this.bucket.getFilePreview({
+        return this.bucket.getFileView({
             bucketId: config.appwriteBucketId,
             fileId
         });
