@@ -86,7 +86,7 @@ export class Service{
                 tableId: config.appwriteCollectionId,
                 queries
                 });
-                console.log(posts);
+                
                 return posts;
                 
             } catch (error) {
